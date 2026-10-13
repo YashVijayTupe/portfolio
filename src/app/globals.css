@@ -1,0 +1,396 @@
+@import "tailwindcss";
+
+/* ============================================
+   DESIGN TOKENS & THEME
+   ============================================ */
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-light: var(--accent-light);
+  --color-accent-dark: var(--accent-dark);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border-color);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-fg);
+  --font-sans: var(--font-inter);
+}
+
+/* ============================================
+   DARK THEME (default)
+   ============================================ */
+:root {
+  --background: #0b0f1a;
+  --foreground: #e8edf5;
+  --accent: #0ea5e9;
+  --accent-light: #38bdf8;
+  --accent-dark: #0284c7;
+  --surface: #111827;
+  --surface-hover: #1e293b;
+  --border-color: #1e293b;
+  --muted: #374151;
+  --muted-fg: #9ca3af;
+
+  color-scheme: dark;
+}
+
+/* ============================================
+   LIGHT THEME
+   ============================================ */
+[data-theme="light"] {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --accent: #0284c7;
+  --accent-light: #0ea5e9;
+  --accent-dark: #0369a1;
+  --surface: #ffffff;
+  --surface-hover: #f1f5f9;
+  --border-color: #e2e8f0;
+  --muted: #cbd5e1;
+  --muted-fg: #64748b;
+
+  color-scheme: light;
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--surface);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+/* ============================================
+   SCROLL PROGRESS BAR
+   ============================================ */
+#scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ============================================
+   GLASSMORPHISM CARD
+   ============================================ */
+.glass-card {
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  box-shadow: 0 0 30px color-mix(in srgb, var(--accent) 10%, transparent);
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   TILT CARD (for projects)
+   ============================================ */
+.tilt-card {
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease;
+}
+
+/* ============================================
+   GRADIENT TEXT
+   ============================================ */
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-light), var(--accent), #a78bfa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================
+   GLOWING BORDER
+   ============================================ */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light), #a78bfa, var(--accent));
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(8px);
+  transition: opacity 0.3s;
+}
+
+.glow-border:hover::after {
+  opacity: 0.8;
+}
+
+/* ============================================
+   ANIMATED BACKGROUND MESH
+   ============================================ */
+.bg-mesh {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bg-mesh::before,
+.bg-mesh::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.15;
+  animation: float 20s ease-in-out infinite;
+}
+
+.bg-mesh::before {
+  width: 600px;
+  height: 600px;
+  background: var(--accent);
+  top: -200px;
+  right: -200px;
+}
+
+.bg-mesh::after {
+  width: 500px;
+  height: 500px;
+  background: #a78bfa;
+  bottom: -200px;
+  left: -200px;
+  animation-delay: -10s;
+}
+
+[data-theme="light"] .bg-mesh::before,
+[data-theme="light"] .bg-mesh::after {
+  opacity: 0.08;
+}
+
+/* ============================================
+   TYPING CURSOR
+   ============================================ */
+.typing-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.2em;
+  background: var(--accent);
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -50px) scale(1.1); }
+  66% { transform: translate(-20px, 30px) scale(0.9); }
+}
+
+/* ============================================
+   SECTION HEADING ACCENT BAR
+   ============================================ */
+.section-heading {
+  position: relative;
+  display: inline-block;
+}
+
+.section-heading::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  border-radius: 2px;
+}
+
+/* ============================================
+   TAG / CHIP
+   ============================================ */
+.tech-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent-light);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  transition: all 0.2s;
+}
+
+.tech-chip:hover {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+  transform: translateY(-1px);
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+.timeline-line {
+  position: absolute;
+  left: 1.25rem;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--accent), color-mix(in srgb, var(--accent) 20%, transparent));
+}
+
+.timeline-dot {
+  position: absolute;
+  left: 0.75rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 3px solid var(--background);
+  z-index: 1;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+/* ============================================
+   BUTTON STYLES
+   ============================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--accent-light);
+  border: 1.5px solid var(--accent);
+  border-radius: 0.75rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-outline:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+/* ============================================
+   TOAST NOTIFICATION
+   ============================================ */
+.toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--surface);
+  color: var(--foreground);
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--accent);
+  font-size: 0.875rem;
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* ============================================
+   LIGHTBOX
+   ============================================ */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+/* ============================================
+   PROJECT MODAL
+   ============================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+@media (max-width: 768px) {
+  .timeline-line {
+    left: 0.75rem;
+  }
+  
+  .timeline-dot {
+    left: 0.25rem;
+    width: 1rem;
+    height: 1rem;
+  }
+}
